@@ -1,0 +1,1 @@
+# otmproject-archetype
