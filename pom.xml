@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>com.travelport.odbootcamp</groupId>
+    <artifactId>odbootcamp-parent</artifactId>
+    <version>1.0.3-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}</artifactId>
+  <version>${version}</version>
+  
+  <name>OTM Model Project</name>
+  <packaging>jar</packaging>
+  
+    <properties>
+		<otm.api.version>16.2.2</otm.api.version>
+        <otm.schema.compiler.version>4.0.beta1</otm.schema.compiler.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+        <dependency>
+			<groupId>com.travelport.odt.restfw</groupId>
+			<artifactId>rest-temp-common-project</artifactId>
+			<version>${rest-framework.version}</version>
+		</dependency>
+	    <dependency>
+			<groupId>com.travelport.odt.restfw</groupId>
+			<artifactId>rest-framework-provider</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.travelport.otm</groupId>
+			<artifactId>otm-core</artifactId>
+			<version>${otm.api.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+<!-- OTM -->
+ 
+			<plugin>
+				<groupId>org.opentravel.otm</groupId>
+				<artifactId>ota2-repository-plugin</artifactId>
+				<version>${otm.schema.compiler.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>initialize-snapshot</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<otmProject>${basedir}/src/main/resources/MP3_Demo.otp</otmProject>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.travelport.odt.restfw</groupId>
+				<artifactId>rest-codegen-transformer</artifactId>
+			    <version>${rest-framework.version}</version>
+				<executions>
+					<execution>
+						<id>rest-compile</id>
+						<goals>
+							<goal>rest-compile</goal>
+						</goals>
+						<configuration>
+							<libraryFile>src/main/resources/MP3_Demo-snapshot.otp</libraryFile>
+							<outputFolder>${project.build.directory}/generated-sources/schemas</outputFolder>
+							<compileSchemas>true</compileSchemas>
+							<compileServices>true</compileServices>
+							<compileSwagger>true</compileSwagger>
+							<compileJsonSchemas>true</compileJsonSchemas>
+							<generateJavaClasses>true</generateJavaClasses>
+							<generateBuilders>false</generateBuilders>
+							<generateModelDoc>false</generateModelDoc>
+							<generateExamples>true</generateExamples>
+							<javaOutputFolder>${project.build.directory}/generated-sources/otm</javaOutputFolder>
+							<debug>true</debug>
+							<bindingStyle>TVP</bindingStyle>
+							<systemId>OD_BOOTCAMP</systemId>
+							<isAsync>false</isAsync>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.travelport.otm</groupId>
+						<artifactId>schema-compiler-ext-tvp</artifactId>
+						<version>${otm.schema.compiler.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+</project>
